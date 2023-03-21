@@ -177,10 +177,13 @@ def exception_handler(
         logger.error(exc)
 
         context: Optional[Dict[str, Any]] = exc.extra if isinstance(exc, SAMLAuthError) else {}
-        if isinstance(exc, SAMLAuthError) and exc.extra:
-            status = exc.extra.get("status_code")
+        status = 500
+        if isinstance(exc, SAMLAuthError):
+            if exc.extra:
+                status = exc.extra.get("status_code")
+            logger.error(exc)
         else:
-            status = 500
+            logger.exception(exc)
 
         return render(request, "django_saml2_auth/error.html", context=context, status=status)
 
