@@ -137,7 +137,7 @@ def exception_handler(
             HttpResponse: Rendered error page with details
         """
         logger = logging.getLogger(__name__)
-        logger.error(f"SAML error in django_saml2_auth: {exc}")  # todo make more customizable
+        logger.error(f"SAML error in django_saml2_auth", exc_info=exc)  # todo make more customizable
 
         context: Optional[Dict[str, Any]] = exc.extra if isinstance(exc, SAMLAuthError) else {}
         if isinstance(exc, SAMLAuthError) and exc.extra:
